@@ -1,0 +1,22 @@
+*{margin: 0; padding: 0}
+
+.container {
+    padding: 16px;
+    text-align: center;
+}
+
+#game-board { /* Canvas */
+    /* border: 1.5px solid black; */
+    width: 200px;
+    height: 400px;
+}
+
+.scoreBoard {
+    margin: 20px;
+}
+
+.scoreBoard > div {
+    display: inline-block;
+    font-size: 25px;
+    font-weight: 800;
+}
