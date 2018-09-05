@@ -22,6 +22,8 @@ var pieces = [
                 this.t,
                 this.z];
 
+var tmpPieces = JSON.parse(JSON.stringify(pieces));
+
 /**
  * setting canvas parameters
  */
@@ -33,8 +35,19 @@ var setCanvasParameters = function(){
 }
 
 var randomPieceGenerator = function(){
-    var next = this.pieces[Math.round(Math.random(0, this.pieces.length-1))];
+    var next = undefined;
+
+    if(this.tmpPieces.length == 1) {
+        next = this.tmpPieces[0];
+        this.tmpPieces = JSON.parse(JSON.stringify(this.pieces));
+    } else {
+        var randomN = Math.round(Math.random(0, this.pieces.length-1));
+        next = this.tmpPieces[randomN];
+        this.tmpPieces.splice(randomN,1);
+    }
+    
     var piece = new Piece(this.ctx, next, 3, next.start);
+    
     return piece;
 };
 
@@ -42,10 +55,8 @@ var frame = function() {
     var next = undefined;
 
     if(!this.globalGameBoard.isGameOver) {
-        debugger;
         if(this.globalGameBoard.piece == undefined) {
-            next = this.pieces[Math.round(Math.random(0, this.pieces.length-1))];
-            var nextPiece = new Piece(this.ctx, next, 3, next.start);
+            var nextPiece = this.randomPieceGenerator();
             this.globalGameBoard.activatePiece(nextPiece);
         }
         
@@ -59,7 +70,7 @@ var frame = function() {
 }
 
 
-var init = function() {
+var startGame = function() {
 
     this.setCanvasParameters();
     var gb = new GameBoard(this.ctx, this.scoreElement);
@@ -77,5 +88,5 @@ var init = function() {
 
 };
 
-init();
+startGame();
 

@@ -73,13 +73,17 @@ class GameBoard {
 
     }
 
-    checkIfGameOver(yCoordinate) {
-        if(yCoordinate<0) {
-            this.isGameOver = true;
-            return true;
-        }
+    checkIfGameOver() {
+        var coordinates = this.piece.getPieceCoordinates();
+        var isGameOver = (coordinates[0][1] < 0);
 
-        return false;
+        for(i = 0; i < coordinates.length; i++) {
+            isGameOver = (isGameOver && coordinates[i][1] < 0 );
+        }
+        
+        this.isGameOver = isGameOver;
+
+        return isGameOver;
     }
 
 
@@ -91,8 +95,10 @@ class GameBoard {
             var x = coordinates[i][0];
             var y = coordinates[i][1];
 
-            this.cellStat[y][x].locked = true;
-            this.cellStat[y][x].color = color;
+            if(y >= 0) {
+                this.cellStat[y][x].locked = true;
+                this.cellStat[y][x].color = color;
+            }
 
             if(min = undefined) {
                 min = y;
@@ -107,7 +113,7 @@ class GameBoard {
         }
 
         // Check if Game Over
-        if(this.checkIfGameOver(min)) {
+        if(!this.checkIfGameOver()) {
             // Check if rows are filled
             for(i=min; i<=max; i++) {
                 this.checkIfRowFilled(i);
@@ -117,8 +123,8 @@ class GameBoard {
         this.piece = undefined;
 
 
-        console.log("Locked Pieces");
-        console.log(this.cellStat);
+        // console.log("Locked Pieces");
+        // console.log(this.cellStat);
 
     }
 
@@ -173,15 +179,19 @@ class GameBoard {
     }
 
     pieceMovement(keyCode) {
-        if(keyCode == 37 && !this.hitLeftWall() && !this.hitLockedPiece('left')){
-            this.piece.moveLeft();
-        }else if(keyCode == 38 && !this.hitBottom() && !this.hitLockedPiece('rotate')) {
-            this.piece.rotate();
-        }else if(keyCode == 39 && !this.hitRightWall() && !this.hitLockedPiece('right')) {
-            this.piece.moveRight();
-        }else if(keyCode == 40 && !this.hitBottom() && !this.hitLockedPiece('down')) {
-            this.piece.moveDown();
-            if(this.hitBottom() || this.hitLockedPiece('down')) {
+        if(this.piece != undefined) {
+            if(keyCode == 37 && !this.hitLeftWall() && !this.hitLockedPiece('left')){
+                this.piece.moveLeft();
+            }else if(keyCode == 38 && !this.hitBottom() && !this.hitLockedPiece('rotate')) {
+                this.piece.rotate();
+            }else if(keyCode == 39 && !this.hitRightWall() && !this.hitLockedPiece('right')) {
+                this.piece.moveRight();
+            }else if(keyCode == 40 && !this.hitBottom() && !this.hitLockedPiece('down')) {
+                this.piece.moveDown();
+                if(this.hitBottom() || this.hitLockedPiece('down')) {
+                    this.lockPiece(this.piece.getPieceCoordinates(), this.piece.color);
+                }
+            } else {
                 this.lockPiece(this.piece.getPieceCoordinates(), this.piece.color);
             }
         }
