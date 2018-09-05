@@ -13,14 +13,45 @@ class Piece {
         this.gridSq = 20;
     }
 
-    getPieceCoordinates() {
+    calculateCoordinates(activeBlock, posX, posY) {
         var coordinates = [];
 
         for(var row=0; row < 4; row++ ) {
             for(var col=0; col < 4; col++ ) {
-
+                if(activeBlock[row][col] == 1) {
+                    coordinates.push([posX+col, posY+row]);
+                }
             }
         }
+
+        return coordinates;
+    }
+
+    getPieceCoordinates() {
+        return this.calculateCoordinates(this.activeBlock, this.posX, this.posY);
+    }
+
+    getPieceMoveCoordinates(direction) {
+        var activeBlock = this.activeBlock;
+        var posX = this.posX;
+        var posY = this.posY;
+
+        switch(direction) {
+            case 'left':
+                posX -= 1;
+                break;
+            case 'right':
+                posX += 1;
+                break;
+            case 'down':
+                posY += 1;
+                break;
+            case 'rotate':
+                activeBlock = this.blocks[((this.rotationN+1)%4)];
+                break;
+        }
+
+        return this.calculateCoordinates(activeBlock, posX, posY);
     }
 
     setGridSq(gridSq) {
@@ -41,9 +72,10 @@ class Piece {
 
                 if(this.activeBlock[row][col] == 1) {
                     this.drawRect(x*this.gridSq, y*this.gridSq, this.gridSq, this.gridSq, color);
-                } else {
-                    this.drawRect(x*this.gridSq, y*this.gridSq, this.gridSq, this.gridSq, "white");
-                }
+                } 
+                // else {
+                //     this.drawRect(x*this.gridSq, y*this.gridSq, this.gridSq, this.gridSq, "white");
+                // }
             }
         }
     }
@@ -53,7 +85,7 @@ class Piece {
     }
 
     unDrawPiece() {
-        this.drawActiveBlockOnCanvas(super.VACANT);
+        this.drawActiveBlockOnCanvas("white");
     }
 
     redrawPiece() {

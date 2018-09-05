@@ -6,6 +6,22 @@ var score = 0;
 var VACANT = "white";
 var gridSq = 20;
 
+var globalGameBoard = undefined;
+
+var requestAnimationFrame = window.requestAnimationFrame || 
+                            window.webkitRequestAnimationFrame ||
+                            window.mozRequestAnimationFrame || 
+                            window.msRequestAnimationFrame;
+
+var pieces = [
+                this.i,
+                this.j,
+                this.l,
+                this.o,
+                this.s,
+                this.t,
+                this.z];
+
 /**
  * setting canvas parameters
  */
@@ -16,61 +32,50 @@ var setCanvasParameters = function(){
     this.ctx.strokeStyle = "black";
 }
 
-var drawRect = function(x, y, w, h, color) {
-    this.ctx.fillStyle=color;
-    this.ctx.fillRect(x,y,w,h);
-    this.ctx.strokeRect(x,y,w,h);
+var randomPieceGenerator = function(){
+    var next = this.pieces[Math.round(Math.random(0, this.pieces.length-1))];
+    var piece = new Piece(this.ctx, next, 3, next.start);
+    return piece;
 };
 
-var drawBoard = function() {
-    this.ctx.strokeStyle = "black";
-    var rows = 20; var cols = 10;
+var frame = function() {
+    var next = undefined;
 
-    for(var i=0; i< cols; i++ ) {
-        for(var j=0; j < rows; j++) {
-            this.drawRect(gridSq*i, gridSq*j, gridSq, gridSq, VACANT);
+    if(!this.globalGameBoard.isGameOver) {
+        debugger;
+        if(this.globalGameBoard.piece == undefined) {
+            next = this.pieces[Math.round(Math.random(0, this.pieces.length-1))];
+            var nextPiece = new Piece(this.ctx, next, 3, next.start);
+            this.globalGameBoard.activatePiece(nextPiece);
         }
+        
+        this.globalGameBoard.pieceMovement(40);
+        setTimeout(function(){
+            this.requestAnimationFrame(this.frame);
+        }, 1000);
+    } else {
+        alert("Game Over");
     }
-};
-
-var updateScore = function() {
-    this.scoreElement.innerHTML = score;
-};
+}
 
 
 var init = function() {
-    this.setCanvasParameters();
-    this.updateScore();
-    this.drawBoard();
 
-    var piece = new Piece(this.ctx, this.z, 3, this.z.start);
+    this.setCanvasParameters();
+    var gb = new GameBoard(this.ctx, this.scoreElement);
+    gb.drawBoard();
+
+    gb.activatePiece(this.randomPieceGenerator());
 
     document.addEventListener("keydown", function(e){
-        if(e.keyCode == 37){
-            piece.moveLeft();
-        }else if(e.keyCode == 38) {
-            piece.rotate();
-        }else if(e.keyCode == 39) {
-            piece.moveRight();
-        }else if(e.keyCode == 40) {
-            piece.moveDown();
-        }
+        gb.pieceUserEvent(e);
     });
 
-}
+    this.globalGameBoard = gb;
+
+    this.frame();
+
+};
 
 init();
 
-class GameBoard {
-    constructor(ctx) {
-        this.ctx = ctx;
-    }
-
-    activatePiece(piece) {
-        this.piece = piece;
-    }
-
-    hitLeftWall() {
-        
-    }
-}
