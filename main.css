@@ -1,3 +1,9 @@
+/**
+ * @author Prajyot Walali
+ * @date 6th September, 2018
+ * GITHUB :: github.com/prajyot-w
+ */
+
 *{margin: 0; padding: 0}
 
 .container {
@@ -6,7 +12,6 @@
 }
 
 #game-board { /* Canvas */
-    /* border: 1.5px solid black; */
     width: 200px;
     height: 400px;
 }

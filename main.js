@@ -1,10 +1,13 @@
 
+/**
+ * @author Prajyot Walali
+ * @date 6th September, 2018
+ * GITHUB :: github.com/prajyot-w
+ */
+
 var cvs = document.getElementById("game-board");
 var ctx = cvs.getContext("2d");
 var scoreElement = document.getElementById("score");
-var score = 0;
-var VACANT = "white";
-var gridSq = 20;
 
 var globalGameBoard = undefined;
 
@@ -20,12 +23,14 @@ var pieces = [
                 this.o,
                 this.s,
                 this.t,
-                this.z];
+                this.z
+            ];
 
 var tmpPieces = JSON.parse(JSON.stringify(pieces));
 
 /**
- * setting canvas parameters
+ * Setting canvas parameters to draw perfect lines on 
+ * canvas.
  */
 var setCanvasParameters = function(){
     this.cvs.width = 200;
@@ -34,6 +39,10 @@ var setCanvasParameters = function(){
     this.ctx.strokeStyle = "black";
 }
 
+/**
+ * Generates random piece and make's sure
+ * all types of pieces are generated at least once.
+ */
 var randomPieceGenerator = function(){
     var next = undefined;
 
@@ -51,6 +60,9 @@ var randomPieceGenerator = function(){
     return piece;
 };
 
+/**
+ * Game Loop
+ */
 var frame = function() {
     var next = undefined;
 
@@ -63,13 +75,15 @@ var frame = function() {
         this.globalGameBoard.pieceMovement(40);
         setTimeout(function(){
             this.requestAnimationFrame(this.frame);
-        }, 1000);
+        }, 700);
     } else {
         alert("Game Over");
     }
 }
 
-
+/**
+ * Game initiator
+ */
 var startGame = function() {
 
     this.setCanvasParameters();

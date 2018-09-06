@@ -1,3 +1,9 @@
+/**
+ * @author Prajyot Walali
+ * @date 6th September, 2018
+ * GITHUB :: github.com/prajyot-w
+ */
+
 class Piece {
     
     constructor(ctx, piece, x, y) {
@@ -73,9 +79,6 @@ class Piece {
                 if(this.activeBlock[row][col] == 1) {
                     this.drawRect(x*this.gridSq, y*this.gridSq, this.gridSq, this.gridSq, color);
                 } 
-                // else {
-                //     this.drawRect(x*this.gridSq, y*this.gridSq, this.gridSq, this.gridSq, "white");
-                // }
             }
         }
     }

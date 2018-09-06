@@ -1,3 +1,9 @@
+/**
+ * @author Prajyot Walali
+ * @date 6th September, 2018
+ * GITHUB :: github.com/prajyot-w
+ */
+
 class GameBoard {
     constructor(ctx, scoreElement) {
         this.ctx = ctx;
@@ -50,25 +56,28 @@ class GameBoard {
         this.scoreElement.innerHTML = this.score;
     }
 
-    checkIfRowFilled(rowN) {
+    checkIfRowFilled() {
         var row = undefined;
-        var isFilled = (this.cellStat[rowN][0].locked && this.cellStat[rowN][0].color != 'white');
+        var isFilled = false;
         
-        for(i=0; i < this.cellStat[rowN].length; i++) {
-            isFilled = (isFilled && (this.cellStat[rowN][i].locked && this.cellStat[rowN][i].color != 'white') )
-        }
-
-        if(isFilled){
-            row = []
-            for(i=0; i < 10; i++) {
-                row.push({locked:false, color: 'white'});
+        for(i = 0; i < this.cellStat.length; i++) {
+            isFilled = (this.cellStat[i][0].locked && this.cellStat[i][0].color != 'white');
+            for(j = 0; j < this.cellStat[i].length; j++) {
+                isFilled = (isFilled && (this.cellStat[i][j].locked && this.cellStat[i][j].color != 'white'));
             }
 
-            this.cellStat.splice(rowN,1);
-            this.cellStat.unshift(row);
+            if(isFilled) {
+                row = [];
+                for(var k = 0; k < 10; k++) {
+                    row.push({locked:false, color: 'white'});
+                }
 
-            this.drawBoard();
-            this.updateScore();
+                this.cellStat.splice(i, 1);
+                this.cellStat.unshift(JSON.parse(JSON.stringify(row)));
+
+                this.drawBoard();
+                this.updateScore();
+            }
         }
 
     }
@@ -88,44 +97,26 @@ class GameBoard {
 
 
     lockPiece(coordinates, color) {
-        var min = undefined;
-        var max = undefined;
+        if(!this.isGameOver) {
+            for(i=0; i < coordinates.length; i++) {
+                var x = coordinates[i][0];
+                var y = coordinates[i][1];
 
-        for(i=0; i < coordinates.length; i++) {
-            var x = coordinates[i][0];
-            var y = coordinates[i][1];
+                if(y >= 0) {
+                    this.cellStat[y][x].locked = true;
+                    this.cellStat[y][x].color = color;
+                }
 
-            if(y >= 0) {
-                this.cellStat[y][x].locked = true;
-                this.cellStat[y][x].color = color;
             }
 
-            if(min = undefined) {
-                min = y;
+            // Check if Game Over
+            if(!this.checkIfGameOver()) {
+                // Check if rows are filled
+                this.checkIfRowFilled();
             }
 
-            if(max == undefined) {
-                max = y;
-            }
-
-            min = min > y ? y : min;
-            max = max < y ? y : max;
+            this.piece = undefined;
         }
-
-        // Check if Game Over
-        if(!this.checkIfGameOver()) {
-            // Check if rows are filled
-            for(i=min; i<=max; i++) {
-                this.checkIfRowFilled(i);
-            }
-        }
-
-        this.piece = undefined;
-
-
-        // console.log("Locked Pieces");
-        // console.log(this.cellStat);
-
     }
 
     hitLockedPiece(direction) {
@@ -188,10 +179,7 @@ class GameBoard {
                 this.piece.moveRight();
             }else if(keyCode == 40 && !this.hitBottom() && !this.hitLockedPiece('down')) {
                 this.piece.moveDown();
-                if(this.hitBottom() || this.hitLockedPiece('down')) {
-                    this.lockPiece(this.piece.getPieceCoordinates(), this.piece.color);
-                }
-            } else {
+            } else if(this.hitBottom() || this.hitLockedPiece('down')) {
                 this.lockPiece(this.piece.getPieceCoordinates(), this.piece.color);
             }
         }
