@@ -14,12 +14,26 @@
     <link rel="stylesheet" href="main.css">
 </head>
 <body>
+
+    <div class="header">
+        <h1>Javascript Tetris</h1>
+    </div>
+
     <div class="container">
         <canvas id="game-board"></canvas>
         <div class="scoreBoard">
             <div>Score :: </div>
             <div id="score"></div>
         </div>
+    </div>
+
+    <div class="instructions">
+        <h3>Instructions</h3>
+        <p>
+            Use Up (&#8593;) arrow key to rotate piece.
+            Left (&#8592;) and Right (&#8594;) arrow key to move the piece to left or right.
+            And Down (&#8595;) arrow key to move the piece down.
+        </p>
     </div>
     <script src="piece.js"></script>
     <script src="board.js"></script>

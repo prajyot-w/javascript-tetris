@@ -11,6 +11,20 @@
     text-align: center;
 }
 
+div > h1, h3, p {
+    text-align: center;
+}
+
+.instructions {
+    width: 50%;
+    margin: auto;
+    padding: 1.7em;
+}
+
+.instructions > p {
+    margin: 0.7em 0em;
+}
+
 #game-board { /* Canvas */
     width: 200px;
     height: 400px;
