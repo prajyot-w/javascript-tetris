@@ -25,9 +25,9 @@
 
 ### Instructions
 
- - Use Up Arrow Key to rotate the tetrimino.
- - Use Left/Right Arrow Keys to move tetrimino in left/right direction.
- - User Down Arrow Key to move tetrimino in downwards direction.
+ - Use Up Arrow Key to rotate the tetromino.
+ - Use Left/Right Arrow Keys to move tetromino in left/right direction.
+ - User Down Arrow Key to move tetromino in downwards direction.
 
 ## Authors
 
