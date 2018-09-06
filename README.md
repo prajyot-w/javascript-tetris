@@ -28,6 +28,12 @@
  - Use Up Arrow Key to rotate the tetromino.
  - Use Left/Right Arrow Keys to move tetromino in left/right direction.
  - User Down Arrow Key to move tetromino in downwards direction.
+ 
+## Built With
+* [vscode](https://code.visualstudio.com/)
+* [node](https://nodejs.org/en/)
+* [npm](https://www.npmjs.com/)
+* [lite-server](https://www.npmjs.com/package/lite-server)
 
 ## Authors
 
